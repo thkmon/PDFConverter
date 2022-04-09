@@ -24,11 +24,39 @@ public class PDFConverter {
 		
 		try {
 			pdfConverter = new PDFConverter();
+			pdfConverter.testConvertPDF2JPGMulti();
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/*
+		try {
+			pdfConverter = new PDFConverter();
 			pdfConverter.testConvertPDF2JPG();
 			pdfConverter.testConvertJPG2PDF();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		*/
+	}
+	
+	
+	/**
+	 * example method of converting PDF file to JPG file.
+	 * 
+	 * @throws Exception
+	 */
+	public void testConvertPDF2JPGMulti() throws Exception {
+		File inputDir = new File("input");
+		File[] fileArr = inputDir.listFiles();
+		for (int i=0; i<fileArr.length; i++) {
+			if (fileArr[i].getName().endsWith(".pdf")) {
+				String pdfFilePath = fileArr[i].getAbsolutePath();
+				String destFolderPath = new File("output").getAbsolutePath();
+				this.convertPDFFileToJPGFile(pdfFilePath, destFolderPath);
+			}
 		}
 	}
 	
@@ -102,9 +130,18 @@ public class PDFConverter {
 				fileNameOnly = fileNameOnly.replace(".", "_");
 			}
 			
+			if (fileNameOnly.indexOf(" ") > -1) {
+				fileNameOnly = fileNameOnly.replace(" ", "_");
+			}
+			
 			File destFolder = new File(destFolderPath);
 			if (!destFolder.exists()) {
 				destFolder.mkdirs();
+			}
+			
+			File destFolder2 = new File(destFolderPath + "/" + fileNameOnly);
+			if (!destFolder2.exists()) {
+				destFolder2.mkdirs();
 			}
 			
 			document = PDDocument.load(file);
@@ -112,15 +149,18 @@ public class PDFConverter {
 			int pageCount = document.getNumberOfPages();
 			System.out.println("pageCount : " + pageCount);
 			
+			String strPageCount = String.valueOf(pageCount);
+			int pageCountLength = strPageCount.length();
+			
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
 			for (int i=0; i<pageCount; i++) { 
 				int pageNum = i + 1;
 				
 			    BufferedImage imageObj = pdfRenderer.renderImageWithDPI(i, 100, ImageType.RGB);
 			    
-			    String imageFileName = fileNameOnly + "-" + pageNum + ".jpg";
+			    String imageFileName = fileNameOnly + "_" + StringUtil.lpad(String.valueOf(pageNum), pageCountLength, "0") + ".jpg";
 			    
-			    File outputfile = new File(destFolderPath + "/" + imageFileName);
+			    File outputfile = new File(destFolderPath + "/" + fileNameOnly + "/" + imageFileName);
 			    ImageIO.write(imageObj, "jpg", outputfile);
 			    
 			    System.out.println("output " + pageNum + "/" + pageCount + " : " + outputfile.getAbsolutePath());
