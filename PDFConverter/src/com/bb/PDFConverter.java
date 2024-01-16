@@ -49,42 +49,45 @@ public class PDFConverter {
 	}
 	
 	
+	// PDF 합치기
 	public static void mergePdf() {
-        try {
-            // PDF 합치기 유틸리티 생성
-            PDFMergerUtility merger = new PDFMergerUtility();
+		try {
+			PDFMergerUtility merger = new PDFMergerUtility();
 
-            // 합칠 PDF 파일들 추가
-            // merger.addSource("path/to/first.pdf");
-            // merger.addSource("path/to/second.pdf");
-            // 필요한 만큼 계속 추가
-            
-            File inputDir = new File("input");
-    		File[] fileArr = inputDir.listFiles();
-    		for (int i=0; i<fileArr.length; i++) {
-    			if (fileArr[i].getName().endsWith(".pdf")) {
-    				String pdfFilePath = fileArr[i].getAbsolutePath();
-    				merger.addSource(pdfFilePath);
-    			}
-    		}
+			// 대상파일
+			// merger.addSource("input/1.pdf");
+			// merger.addSource("input/2.pdf");
+			// merger.addSource("input/3.pdf");
 
-            // 결과 파일 설정
-    		String destFolderPath = "output";
-    		File destFolder = new File(destFolderPath);
+			// 대상파일 : input폴더 하위의 모든 pdf파일 추가
+			File inputDir = new File("input");
+			File[] fileArr = inputDir.listFiles();
+			for (int i = 0; i < fileArr.length; i++) {
+				if (fileArr[i].getName().endsWith(".pdf")) {
+					String pdfFilePath = fileArr[i].getAbsolutePath();
+					merger.addSource(pdfFilePath);
+				}
+			}
+
+			// 결과파일
+			String destFolderPath = "output";
+			File destFolder = new File(destFolderPath);
 			if (!destFolder.exists()) {
 				destFolder.mkdirs();
 			}
-			
-            merger.setDestinationFileName(destFolderPath + "/example.pdf");
 
-            // PDF 합치기 실행
-            merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+			merger.setDestinationFileName(destFolderPath + "/example.pdf");
 
-            System.out.println("PDF 문서가 성공적으로 합쳐졌습니다.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			// PDF 합치기 실행
+			merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+
+			System.out.println("PDF 합치기 완료. output/example.pdf");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * example method of converting PDF file to JPG file.
