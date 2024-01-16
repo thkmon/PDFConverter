@@ -3,10 +3,13 @@ package com.bb;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -40,8 +43,48 @@ public class PDFConverter {
 			e.printStackTrace();
 		}
 		*/
+		
+		// PDF 합치기
+		// mergePdf();
 	}
 	
+	
+	public static void mergePdf() {
+        try {
+            // PDF 합치기 유틸리티 생성
+            PDFMergerUtility merger = new PDFMergerUtility();
+
+            // 합칠 PDF 파일들 추가
+            // merger.addSource("path/to/first.pdf");
+            // merger.addSource("path/to/second.pdf");
+            // 필요한 만큼 계속 추가
+            
+            File inputDir = new File("input");
+    		File[] fileArr = inputDir.listFiles();
+    		for (int i=0; i<fileArr.length; i++) {
+    			if (fileArr[i].getName().endsWith(".pdf")) {
+    				String pdfFilePath = fileArr[i].getAbsolutePath();
+    				merger.addSource(pdfFilePath);
+    			}
+    		}
+
+            // 결과 파일 설정
+    		String destFolderPath = "output";
+    		File destFolder = new File(destFolderPath);
+			if (!destFolder.exists()) {
+				destFolder.mkdirs();
+			}
+			
+            merger.setDestinationFileName(destFolderPath + "/example.pdf");
+
+            // PDF 합치기 실행
+            merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+
+            System.out.println("PDF 문서가 성공적으로 합쳐졌습니다.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	/**
 	 * example method of converting PDF file to JPG file.
