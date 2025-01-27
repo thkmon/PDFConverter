@@ -202,7 +202,7 @@ public class PDFConverter {
 			for (int i=0; i<pageCount; i++) { 
 				int pageNum = i + 1;
 				
-			    BufferedImage imageObj = pdfRenderer.renderImageWithDPI(i, 100, ImageType.RGB);
+			    BufferedImage imageObj = pdfRenderer.renderImageWithDPI(i, 500, ImageType.RGB);
 			    
 			    String imageFileName = fileNameOnly + "_" + StringUtil.lpad(String.valueOf(pageNum), pageCountLength, "0") + ".jpg";
 			    
