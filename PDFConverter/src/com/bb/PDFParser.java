@@ -12,14 +12,21 @@ public class PDFParser {
 	
 	public static void main(String[] args) {
 		
+		System.out.println("시작");
+		
 		try {
 			ArrayList<String> stringList = new ArrayList<String>();
 			
 			ArrayList<String> fileList = FileReadUtil.readFile(new File("input/fms_input.txt"));
+			// ArrayList<String> fileList = FileReadUtil.readFile(new File("input/fms_input2.txt"));
 			for (int i=0; i<fileList.size(); i++) {
 				System.out.println(fileList.get(i));
 				
 				String dd = fileList.get(i);
+				
+				if (dd.startsWith("--")) {
+					continue;
+				}
 				
 				String[] ddArr = dd.split("\t");
 				
@@ -94,11 +101,17 @@ public class PDFParser {
 //	            }
 			}
 			
+			if (stringList.size() == 0) {
+				stringList.add("결과없음(0건)");
+			}
 			FileWriteUtil.writeFile("output/fms_output.txt", stringList, false);
 			
         } catch (Exception e) {
             System.err.println("PDF 파싱 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
+            
+        } finally {
+        	System.out.println("끝");
         }
 	}
 }
