@@ -27,6 +27,10 @@ public class PDFConverter {
 		try {
 			pdfConverter = new PDFConverter();
 			pdfConverter.testConvertPDF2JPGMulti();
+//			pdfConverter.testConvertJPG2PDF();
+			
+			// BBThumbnailMaker thumbnailMaker = new BBThumbnailMaker();
+			// thumbnailMaker.makeThumbnail();
 		
 		} catch (Exception e) {
 			e.printStackTrace();
